@@ -14,6 +14,9 @@
 		8876D6A520B26F3800826F85 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8876D6A320B26F3800826F85 /* LaunchScreen.storyboard */; };
 		8876D6A820B26F3800826F85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D6A720B26F3800826F85 /* main.m */; };
 		8876D6B020B26FD100826F85 /* HTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D6AF20B26FD100826F85 /* HTCapture.m */; };
+		8876D6B420B2BAB600826F85 /* HTVideoEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D6B220B2BAB600826F85 /* HTVideoEncoder.m */; };
+		8876D6B720B2BC7400826F85 /* HTH264NALUWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D6B620B2BC7400826F85 /* HTH264NALUWrapper.m */; };
+		8876D6BA20B2BC9500826F85 /* HTRTMPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D6B920B2BC9500826F85 /* HTRTMPManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +32,12 @@
 		8876D6A720B26F3800826F85 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8876D6AE20B26FD100826F85 /* HTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTCapture.h; sourceTree = "<group>"; };
 		8876D6AF20B26FD100826F85 /* HTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTCapture.m; sourceTree = "<group>"; };
+		8876D6B220B2BAB600826F85 /* HTVideoEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTVideoEncoder.m; sourceTree = "<group>"; };
+		8876D6B320B2BAB600826F85 /* HTVideoEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTVideoEncoder.h; sourceTree = "<group>"; };
+		8876D6B520B2BC7400826F85 /* HTH264NALUWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTH264NALUWrapper.h; sourceTree = "<group>"; };
+		8876D6B620B2BC7400826F85 /* HTH264NALUWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTH264NALUWrapper.m; sourceTree = "<group>"; };
+		8876D6B820B2BC9500826F85 /* HTRTMPManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTRTMPManager.h; sourceTree = "<group>"; };
+		8876D6B920B2BC9500826F85 /* HTRTMPManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTRTMPManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +70,8 @@
 		8876D69720B26F3800826F85 /* HTLivePushKit */ = {
 			isa = PBXGroup;
 			children = (
+				8876D6B320B2BAB600826F85 /* HTVideoEncoder.h */,
+				8876D6B220B2BAB600826F85 /* HTVideoEncoder.m */,
 				8876D6AE20B26FD100826F85 /* HTCapture.h */,
 				8876D6AF20B26FD100826F85 /* HTCapture.m */,
 				8876D69820B26F3800826F85 /* AppDelegate.h */,
@@ -72,6 +83,10 @@
 				8876D6A320B26F3800826F85 /* LaunchScreen.storyboard */,
 				8876D6A620B26F3800826F85 /* Info.plist */,
 				8876D6A720B26F3800826F85 /* main.m */,
+				8876D6B520B2BC7400826F85 /* HTH264NALUWrapper.h */,
+				8876D6B620B2BC7400826F85 /* HTH264NALUWrapper.m */,
+				8876D6B820B2BC9500826F85 /* HTRTMPManager.h */,
+				8876D6B920B2BC9500826F85 /* HTRTMPManager.m */,
 			);
 			path = HTLivePushKit;
 			sourceTree = "<group>";
@@ -149,8 +164,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8876D69D20B26F3800826F85 /* ViewController.m in Sources */,
+				8876D6BA20B2BC9500826F85 /* HTRTMPManager.m in Sources */,
+				8876D6B720B2BC7400826F85 /* HTH264NALUWrapper.m in Sources */,
 				8876D6A820B26F3800826F85 /* main.m in Sources */,
 				8876D6B020B26FD100826F85 /* HTCapture.m in Sources */,
+				8876D6B420B2BAB600826F85 /* HTVideoEncoder.m in Sources */,
 				8876D69A20B26F3800826F85 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

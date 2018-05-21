@@ -10,8 +10,8 @@
 
 @interface HTCapture ()<AVCaptureAudioDataOutputSampleBufferDelegate,AVCaptureVideoDataOutputSampleBufferDelegate>
 
-@property (nonatomic, strong)AVCaptureDeviceInput *currentVideoDeviceInput;
-@property (nonatomic, strong)AVCaptureConnection *videoConnection;
+@property (nonatomic, strong)AVCaptureDeviceInput   *currentVideoInput;
+@property (nonatomic, strong)AVCaptureConnection    *videoConnection;
 
 @end
 
@@ -21,10 +21,12 @@
     // 1.创建捕获会话,必须要强引用，否则会被释放
     _captureSession = [[AVCaptureSession alloc] init];
     
+    [_captureSession setSessionPreset:AVCaptureSessionPreset1280x720];
+    
     // 2.获取摄像头设备，默认是后置摄像头
     AVCaptureDevice *videoDevice = [self getVideoDevice:AVCaptureDevicePositionBack];
     // 3.创建对应视频设备输入对象
-    _currentVideoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:nil];
+    _currentVideoInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:nil];
     
     // 4.获取声音设备
     AVCaptureDevice *audioDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
@@ -34,16 +36,14 @@
     // 6.添加到会话中
     // 注意“最好要判断是否能添加输入，会话不能添加空的
     // 6.1 添加视频
-    if ([_captureSession canAddInput:_currentVideoDeviceInput]) {
-        [_captureSession addInput:_currentVideoDeviceInput];
+    if ([_captureSession canAddInput:_currentVideoInput]) {
+        [_captureSession addInput:_currentVideoInput];
     }
     // 6.2 添加音频
     if ([_captureSession canAddInput:audioDeviceInput]) {
         [_captureSession addInput:audioDeviceInput];
     }
-    
     //====================以上是硬件捕获输入====================
-    
     
     // 7.获取视频数据输出设备
     AVCaptureVideoDataOutput *videoOutput = [[AVCaptureVideoDataOutput alloc] init];
@@ -71,7 +71,25 @@
     return _captureSession;
 }
 
-// 指定摄像头方向获取摄像头
+// 切换摄像头
+- (void)switchCamera{
+    AVCaptureDevice *newDevice;
+    if (self.currentVideoInput.device.position != AVCaptureDevicePositionFront) {
+        newDevice = [self getVideoDevice:AVCaptureDevicePositionFront];
+    }else{
+        newDevice = [self getVideoDevice:AVCaptureDevicePositionBack];
+    }
+    [_captureSession stopRunning];
+    [self.captureSession removeInput:_currentVideoInput];
+    AVCaptureDeviceInput *videoInput = [AVCaptureDeviceInput deviceInputWithDevice:newDevice error:nil];
+    if ([_captureSession canAddInput:videoInput]) {
+        [_captureSession addInput:videoInput];
+        _currentVideoInput = videoInput;
+        [_captureSession startRunning];
+    }
+}
+
+// 获取摄像头
 - (AVCaptureDevice *)getVideoDevice:(AVCaptureDevicePosition)position
 {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -83,14 +101,13 @@
     return nil;
 }
 
-- (void)switchCamera{
-    
-}
+
+
 
 // 获取输入设备数据，有可能是音频有可能是视频
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
-    if (_videoConnection == connection && self.delegate && [self.delegate respondsToSelector:@selector(ht_captureOutput:didOutputSampleBuffer:fromConnection:)]) {
+    if ([connection.output isKindOfClass:[AVCaptureVideoDataOutput class]] && self.delegate && [self.delegate respondsToSelector:@selector(ht_captureOutput:didOutputSampleBuffer:fromConnection:)]) {
         [self.delegate ht_captureOutput:captureOutput didOutputSampleBuffer:sampleBuffer fromConnection:connection];
     }
 }
