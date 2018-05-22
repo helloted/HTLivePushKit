@@ -9,15 +9,9 @@
 #import "HTRTMPManager.h"
 #import "rtmp.h"
 
+#import "log.h"
+
 #define RTMP_HEAD_SIZE (sizeof(RTMPPacket)+RTMP_MAX_HEADER_SIZE)
-
-@interface HTRTMPManager(){
-    RTMP* rtmp;
-    double start_time;
-    dispatch_queue_t workQueue;//异步Queue
-}
-
-@end
 
 @implementation HTRTMPManager
 
@@ -27,30 +21,36 @@
     if(self)
     {
         self->workQueue = dispatch_queue_create("rtmpSendQueue", NULL);
+//        RTMP_LogSetLevel(RTMP_LOGALL);
+        //        RTMP_LogCallback(rtmpLog);
     }
     return self;
 }
 
+
+
 + (instancetype)shareInstance
 {
-    static HTRTMPManager *_sharedManager = nil;
-    static dispatch_once_t oncePredicate;
-    dispatch_once(&oncePredicate, ^{
-        _sharedManager = [[self alloc] init];
+    static HTRTMPManager* shareInstace = nil;
+    static dispatch_once_t instance;
+    dispatch_once(&instance, ^{
+        shareInstace = [[self alloc] init];
     });
-    return _sharedManager;
+    return shareInstace;
 }
 
 
-- (BOOL)connectWithURL:(NSString *)url{
+- (BOOL)startRtmpConnect:(NSString *)urlString
+{
+    self.rtmpUrl = urlString;
     if(self->rtmp)
     {
-        [self stopConnect];
+        [self stopRtmpConnect];
     }
     
     self->rtmp = RTMP_Alloc();
     RTMP_Init(self->rtmp);
-    int err = RTMP_SetupURL(self->rtmp, (char*)[url cStringUsingEncoding:NSASCIIStringEncoding]);
+    int err = RTMP_SetupURL(self->rtmp, (char*)[_rtmpUrl cStringUsingEncoding:NSASCIIStringEncoding]);
     
     if(err < 0)
     {
@@ -83,25 +83,34 @@
     
     self->start_time = [[NSDate date] timeIntervalSince1970]*1000;
     
-    return TRUE;
-    
+    return true;
 }
 
-- (void)stopConnect{
+
+- (BOOL)stopRtmpConnect
+{
     if(self->rtmp != NULL)
     {
         RTMP_Close(self->rtmp);
         RTMP_Free(self->rtmp);
-        return;
+        return true;
     }
+    return false;
 }
 
-
-- (void)send_video_sps_pps:(unsigned char*)sps andSpsLength:(int)sps_len andPPs:(unsigned char*)pps andPPsLength:(uint32_t)pps_len
-{
+- (void)sendVideoSPS:(NSData *)spsData pps:(NSData *)ppsData{
+    __block NSData *blockSPS = spsData;
+    __block NSData *blockPPS = ppsData;
     dispatch_async(self->workQueue, ^{
         if(self->rtmp!= NULL)
         {
+            
+            unsigned char *sps = (uint8_t *)[blockSPS bytes];
+            unsigned char *pps = (uint8_t *)[blockPPS bytes];
+            
+            uint32_t sps_len = (uint32_t)blockSPS.length;
+            uint32_t pps_len = (uint32_t)blockPPS.length;
+            
             RTMPPacket * packet;
             unsigned char * body;
             int i;
@@ -168,20 +177,19 @@
 }
 
 
-- (void)send_rtmp_video:(unsigned char*)buf andLength:(uint32_t)len
-{
-    __block unsigned char* buffer = buf;
-    __block uint32_t length = len;
+- (void)sendVideoFrame:(NSData *)videoData{
+    __block NSData *blockData = videoData;
     dispatch_async(self->workQueue, ^{
         if(self->rtmp != NULL)
         {
+            unsigned char *buffer = (uint8_t *)[blockData bytes];
+            uint32_t length = (uint32_t)blockData.length;
+            
             int type;
             RTMPPacket * packet;
             unsigned char * body;
             
             uint32_t timeoffset = [[NSDate date] timeIntervalSince1970]*1000 - self->start_time;  /*start_time为开始直播时的时间戳*/
-            
-            
             
             /*去掉帧界定符(这里可能2种,但是sps or  pps只能为 00 00 00 01)*/
             if (buffer[2] == 0x00){ /*00 00 00 01*/
@@ -251,4 +259,114 @@
 
 
 
+
+- (void)send_rtmp_audio_spec:(unsigned char *)spec_buf andLength:(uint32_t) spec_len
+{
+    dispatch_async(self->workQueue, ^{
+        if(self->rtmp != NULL)
+        {
+            RTMPPacket * packet;
+            unsigned char * body;
+            uint32_t len;
+            
+            len = spec_len;  /*spec data长度,一般是2*/
+            
+            packet = (RTMPPacket *)malloc(RTMP_HEAD_SIZE+len+2);
+            memset(packet,0,RTMP_HEAD_SIZE);
+            
+            packet->m_body = (char *)packet + RTMP_HEAD_SIZE;
+            body = (unsigned char *)packet->m_body;
+            
+            /*AF 00 + AAC RAW data*/
+            body[0] = 0xAF;
+            body[1] = 0x00;
+            memcpy(&body[2],spec_buf,len); /*spec_buf是AAC sequence header数据*/
+            
+            packet->m_packetType = RTMP_PACKET_TYPE_AUDIO;
+            packet->m_nBodySize = len + 2;
+            packet->m_nChannel = 0x04;
+            packet->m_nTimeStamp = 0;
+            packet->m_hasAbsTimestamp = 0;
+            packet->m_headerType = RTMP_PACKET_SIZE_LARGE;
+            packet->m_nInfoField2 = rtmp->m_stream_id;
+            
+            if(RTMP_IsConnected(self->rtmp))
+            {
+                /*调用发送接口*/
+                int success = RTMP_SendPacket(self->rtmp,packet,TRUE);
+                if(success != 1)
+                {
+                    NSLog(@"send_rtmp_audio_spec fail");
+                }
+            }
+            //free(packet);
+        }
+        else
+        {
+            NSLog(@"send_rtmp_audio_spec RTMP is not ready");
+        }
+    });
+}
+
+
+- (void)sendAudioFrame:(NSData *)audioData{
+    __block NSData *blockData = audioData;
+    dispatch_async(self->workQueue, ^{
+        if(self->rtmp != NULL)
+        {
+            
+            unsigned char *buffer = (uint8_t *)[blockData bytes];
+            uint32_t length = (uint32_t)blockData.length;
+            
+            uint32_t timeoffset = [[NSDate date] timeIntervalSince1970]*1000 - self->start_time;
+            
+            buffer += 7;
+            length -= 7;
+            
+            if (length > 0)
+            {
+                RTMPPacket * packet;
+                unsigned char * body;
+                
+                packet = (RTMPPacket *)malloc(RTMP_HEAD_SIZE + length + 2);
+                memset(packet,0,RTMP_HEAD_SIZE);
+                
+                packet->m_body = (char *)packet + RTMP_HEAD_SIZE;
+                body = (unsigned char *)packet->m_body;
+                
+                /*AF 01 + AAC RAW data*/
+                body[0] = 0xAF;
+                body[1] = 0x01;
+                memcpy(&body[2],buffer,length);
+                
+                packet->m_packetType = RTMP_PACKET_TYPE_AUDIO;
+                packet->m_nBodySize = length + 2;
+                packet->m_nChannel = 0x04;
+                packet->m_nTimeStamp = timeoffset;
+                packet->m_hasAbsTimestamp = 0;
+                packet->m_headerType = RTMP_PACKET_SIZE_MEDIUM;
+                packet->m_nInfoField2 = rtmp->m_stream_id;
+                
+                if(RTMP_IsConnected(self->rtmp))
+                {
+                    /*调用发送接口*/
+                    int success = RTMP_SendPacket(self->rtmp,packet,TRUE);
+                    if(success != 1)
+                    {
+                        NSLog(@"send_rtmp_audio_spec fail");
+                    }
+                }
+                free(packet);
+            }
+        }
+        else
+        {
+            NSLog(@"send_rtmp_audio RTMP is not ready");
+        }
+    });
+}
+
+
+
 @end
+

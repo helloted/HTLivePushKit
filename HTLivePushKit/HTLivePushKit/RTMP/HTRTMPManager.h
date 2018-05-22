@@ -7,17 +7,56 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "rtmp.h"
 
 @interface HTRTMPManager : NSObject
+{
+    RTMP* rtmp;
+    double start_time;
+    dispatch_queue_t workQueue;//异步Queue
+}
 
+@property (nonatomic,copy) NSString* rtmpUrl;//rtmp服务器流地址
+
+/**
+ *  获取单例
+ *
+ *  @return 单例
+ */
 + (instancetype)shareInstance;
 
-- (BOOL)connectWithURL:(NSString *)url;
+/**
+ *  开始连接服务器
+ *  urlString: 流媒体服务器地址
+ *  @return 是否成功
+ */
+- (BOOL)startRtmpConnect:(NSString *)urlString;
 
-- (void)stopConnect;
+/**
+ *  停止连接服务器
+ *
+ *  @return 是否成功
+ */
+- (BOOL)stopRtmpConnect;
 
-- (void)send_video_sps_pps:(unsigned char*)sps andSpsLength:(int)sps_len andPPs:(unsigned char*)pps andPPsLength:(uint32_t)pps_len;
+/**
+ *  发送视频
+ */
+- (void)sendVideoSPS:(NSData *)spsData pps:(NSData *)ppsData;
 
-- (void)send_rtmp_video:(unsigned char*)buf andLength:(uint32_t)len;
+- (void)sendVideoFrame:(NSData *)videoData;
+
+
+
+- (void)sendAudioFrame:(NSData *)audioData;
+
+/**
+ *  发送音频spec
+ *
+ *  @param spec_buf spec数据
+ *  @param spec_len spec长度
+ */
+- (void)send_rtmp_audio_spec:(unsigned char *)spec_buf andLength:(uint32_t) spec_len;
 
 @end
+

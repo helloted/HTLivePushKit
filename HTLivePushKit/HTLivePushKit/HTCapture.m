@@ -110,9 +110,10 @@
 //    if ([connection.output isKindOfClass:[AVCaptureVideoDataOutput class]] && self.delegate && [self.delegate respondsToSelector:@selector(ht_captureOutput:didOutputSampleBuffer:fromConnection:)]) {
 //        [self.delegate ht_captureOutput:captureOutput didOutputSampleBuffer:sampleBuffer fromConnection:connection];
 //    }
-    if (_videoConnection == connection && self.delegate && [self.delegate respondsToSelector:@selector(ht_captureOutput:didOutputSampleBuffer:fromConnection:)]) {
-        [self.delegate ht_captureOutput:captureOutput didOutputSampleBuffer:sampleBuffer fromConnection:connection];
-    }
+//    if (_videoConnection == connection && self.delegate && [self.delegate respondsToSelector:@selector(ht_captureOutput:didOutputSampleBuffer:fromConnection:)]) {
+//        [self.delegate ht_captureOutput:captureOutput didOutputSampleBuffer:sampleBuffer fromConnection:connection];
+//    }
+    [self.delegate ht_captureOutput:captureOutput didOutputSampleBuffer:sampleBuffer fromConnection:connection];
 }
 
 @end
