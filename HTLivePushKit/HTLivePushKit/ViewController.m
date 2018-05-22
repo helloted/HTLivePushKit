@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "HTCapture.h"
 #import "HTVideoEncoder.h"
+#import "HTRTMPManager.h"
 
 @interface ViewController ()<HTCaptureDelegate,HTVideoEncoderDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *switchBtn;
@@ -27,6 +28,8 @@
     [super viewDidLoad];
     
     [_switchBtn addTarget:self.capture action:@selector(switchCamera) forControlEvents:UIControlEventTouchUpInside];
+    
+    [[HTRTMPManager shareInstance] connectWithURL:@"rtmp://192.168.0.12:1935/zbcs/room"];
     
     // 编码
     _encoder = [[HTVideoEncoder alloc]init];
@@ -66,7 +69,7 @@
     NSMutableData *h264Data = [[NSMutableData alloc] init];
     [h264Data appendData:ByteHeader];
     [h264Data appendData:data];
-//    [[rtmpManager getInstance] send_rtmp_video:(uint8_t *)[h264Data bytes] andLength:(uint32_t)h264Data.length];
+    [[HTRTMPManager shareInstance] send_rtmp_video:(uint8_t *)[h264Data bytes] andLength:(uint32_t)h264Data.length];
 }
 
 
@@ -88,7 +91,7 @@
     [ppsData appendData:ByteHeader];
     [ppsData appendData:pps];
     
-//    [[rtmpManager getInstance] send_video_sps_pps:(uint8_t *)[h264Data bytes] andSpsLength:(uint32_t)h264Data.length andPPs:(uint8_t *)[ppsData bytes] andPPsLength:(uint32_t)ppsData.length];
+    [[HTRTMPManager shareInstance] send_video_sps_pps:(uint8_t *)[h264Data bytes] andSpsLength:(uint32_t)h264Data.length andPPs:(uint8_t *)[ppsData bytes] andPPsLength:(uint32_t)ppsData.length];
 }
 
 

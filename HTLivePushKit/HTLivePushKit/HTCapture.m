@@ -21,7 +21,7 @@
     // 1.创建捕获会话,必须要强引用，否则会被释放
     _captureSession = [[AVCaptureSession alloc] init];
     
-    [_captureSession setSessionPreset:AVCaptureSessionPreset1280x720];
+    [_captureSession setSessionPreset:AVCaptureSessionPresetiFrame960x540];
     
     // 2.获取摄像头设备，默认是后置摄像头
     AVCaptureDevice *videoDevice = [self getVideoDevice:AVCaptureDevicePositionBack];
@@ -107,7 +107,10 @@
 // 获取输入设备数据，有可能是音频有可能是视频
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
-    if ([connection.output isKindOfClass:[AVCaptureVideoDataOutput class]] && self.delegate && [self.delegate respondsToSelector:@selector(ht_captureOutput:didOutputSampleBuffer:fromConnection:)]) {
+//    if ([connection.output isKindOfClass:[AVCaptureVideoDataOutput class]] && self.delegate && [self.delegate respondsToSelector:@selector(ht_captureOutput:didOutputSampleBuffer:fromConnection:)]) {
+//        [self.delegate ht_captureOutput:captureOutput didOutputSampleBuffer:sampleBuffer fromConnection:connection];
+//    }
+    if (_videoConnection == connection && self.delegate && [self.delegate respondsToSelector:@selector(ht_captureOutput:didOutputSampleBuffer:fromConnection:)]) {
         [self.delegate ht_captureOutput:captureOutput didOutputSampleBuffer:sampleBuffer fromConnection:connection];
     }
 }
