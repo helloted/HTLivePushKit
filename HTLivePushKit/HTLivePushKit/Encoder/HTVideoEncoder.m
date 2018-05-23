@@ -114,7 +114,7 @@ static void compressionSessionCallback (void * CM_NULLABLE outputCallbackRefCon,
                     NSData *pps = [NSData dataWithBytes:pparameterSet length:pparameterSetSize];
                     if (encoder->_delegate)
                     {
-                        [encoder->_delegate videoEncoderSPS:sps pps:pps];
+                        [encoder->_delegate videoEncoderResultSPS:[encoder naluDataWrapper:sps] pps:[encoder naluDataWrapper:pps]];
                     }
                 }
             }
@@ -141,13 +141,23 @@ static void compressionSessionCallback (void * CM_NULLABLE outputCallbackRefCon,
             NSData *naluData = [NSData dataWithBytes:blockData+currReadPos+4 length:naluLen];
             currReadPos += (4+naluLen);
             
-            if (encoder.delegate && [encoder.delegate respondsToSelector:@selector(videoEncoderGetNALUData:keyFrame:)]) {
-                [encoder.delegate videoEncoderGetNALUData:naluData keyFrame:isKeyFrame];
+            if (encoder.delegate && [encoder.delegate respondsToSelector:@selector(videoEncoderResultNALUData:keyFrame:)]) {
+                [encoder.delegate videoEncoderResultNALUData:[encoder naluDataWrapper:naluData] keyFrame:isKeyFrame];
             }
         }
     }else{
         NSLog(@"got h264 data failed");
     }
+}
+
+- (NSData *)naluDataWrapper:(NSData *)data{
+    const char bytes[] = "\x00\x00\x00\x01";
+    size_t length = (sizeof bytes) - 1;
+    NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
+    NSMutableData *result = [[NSMutableData alloc] init];
+    [result appendData:ByteHeader];
+    [result appendData:data];
+    return result;
 }
 
 - (void)encodeVideoWithSampleBuffer:(CMSampleBufferRef)sampleBuffer{

@@ -70,36 +70,13 @@
 }
 
 
-- (void)videoEncoderGetNALUData:(NSData *)data keyFrame:(BOOL)isKeyFrame{
-    const char bytes[] = "\x00\x00\x00\x01";
-    size_t length = (sizeof bytes) - 1;
-    NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
-    NSMutableData *h264Data = [[NSMutableData alloc] init];
-    [h264Data appendData:ByteHeader];
-    [h264Data appendData:data];
-    [[HTRTMPManager shareInstance] sendVideoFrame:h264Data];
+- (void)videoEncoderResultNALUData:(NSData *)data keyFrame:(BOOL)isKeyFrame{
+    [[HTRTMPManager shareInstance] sendVideoFrame:data];
 }
 
 
-- (void)videoEncoderSPS:(NSData *)sps pps:(NSData *)pps{
-    const char bytes[] = "\x00\x00\x00\x01";
-    size_t length = (sizeof bytes) - 1;
-    NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
-    
-    
-    //发sps
-    NSMutableData *h264Data = [[NSMutableData alloc] init];
-    [h264Data appendData:ByteHeader];
-    [h264Data appendData:sps];
-    
-    //发pps
-    NSMutableData *ppsData = [[NSMutableData alloc]init];
-    
-    [ppsData setLength:0];
-    [ppsData appendData:ByteHeader];
-    [ppsData appendData:pps];
-    
-    [[HTRTMPManager shareInstance] sendVideoSPS:h264Data pps:ppsData];
+- (void)videoEncoderResultSPS:(NSData *)sps pps:(NSData *)pps{
+    [[HTRTMPManager shareInstance] sendVideoSPS:sps pps:pps];
 }
 
 

@@ -18,8 +18,8 @@ typedef struct {
 
 @protocol HTVideoEncoderDelegate <NSObject>
 
-- (void)videoEncoderSPS:(NSData *)sps pps:(NSData *)pps;
-- (void)videoEncoderGetNALUData:(NSData*)data keyFrame:(BOOL)isKeyFrame;
+- (void)videoEncoderResultSPS:(NSData *)sps pps:(NSData *)pps;
+- (void)videoEncoderResultNALUData:(NSData*)data keyFrame:(BOOL)isKeyFrame;
 
 @end
 
