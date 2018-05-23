@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "HTLivePushKit"
-  s.version      = "0.1.0"
+  s.version      = "1.0.1"
   s.summary      = "This is a Kit for iOS Live Push"
   s.description  = "This is a Kit for iOS Live Push,you can pod this Kit to push video and audio"
 

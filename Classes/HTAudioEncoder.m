@@ -153,7 +153,7 @@ OSStatus inInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberDat
 }
 
 
-- (void) encodeSampleBuffer:(CMSampleBufferRef)sampleBuffer completionBlock:(void (^)(NSData * encodedData, NSError* error))completionBlock {
+- (void)encodeSampleBuffer:(CMSampleBufferRef)sampleBuffer completionBlock:(void (^)(NSData * encodedData, NSError* error))completionBlock {
     CFRetain(sampleBuffer);
     dispatch_async(_encoderQueue, ^{
         if (!_audioConverter) {
