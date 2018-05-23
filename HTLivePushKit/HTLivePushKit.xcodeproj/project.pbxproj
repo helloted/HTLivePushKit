@@ -13,8 +13,6 @@
 		8876D6A220B26F3800826F85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8876D6A120B26F3800826F85 /* Assets.xcassets */; };
 		8876D6A520B26F3800826F85 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8876D6A320B26F3800826F85 /* LaunchScreen.storyboard */; };
 		8876D6A820B26F3800826F85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D6A720B26F3800826F85 /* main.m */; };
-		8876D6B020B26FD100826F85 /* HTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D6AF20B26FD100826F85 /* HTCapture.m */; };
-		8876D6B720B2BC7400826F85 /* HTH264NALUWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D6B620B2BC7400826F85 /* HTH264NALUWrapper.m */; };
 		8876D71420B2C2F100826F85 /* HTRTMPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D6BD20B2C2F100826F85 /* HTRTMPManager.m */; };
 		8876D71520B2C2F100826F85 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8876D71120B2C2F100826F85 /* libcrypto.a */; };
 		8876D71620B2C2F100826F85 /* librtmp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8876D71220B2C2F100826F85 /* librtmp.a */; };
@@ -22,6 +20,7 @@
 		8876D71A20B2C33600826F85 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8876D71920B2C33600826F85 /* libz.tbd */; };
 		8876D72C20B40AFF00826F85 /* HTVideoEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D72B20B40AFF00826F85 /* HTVideoEncoder.m */; };
 		8876D72F20B40B1500826F85 /* HTAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D72E20B40B1500826F85 /* HTAudioEncoder.m */; };
+		8876D73320B4FFE800826F85 /* HTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 8876D73220B4FFE800826F85 /* HTCapture.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,10 +34,6 @@
 		8876D6A420B26F3800826F85 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8876D6A620B26F3800826F85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8876D6A720B26F3800826F85 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		8876D6AE20B26FD100826F85 /* HTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTCapture.h; sourceTree = "<group>"; };
-		8876D6AF20B26FD100826F85 /* HTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTCapture.m; sourceTree = "<group>"; };
-		8876D6B520B2BC7400826F85 /* HTH264NALUWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTH264NALUWrapper.h; sourceTree = "<group>"; };
-		8876D6B620B2BC7400826F85 /* HTH264NALUWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTH264NALUWrapper.m; sourceTree = "<group>"; };
 		8876D6BC20B2C2F100826F85 /* HTRTMPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTRTMPManager.h; sourceTree = "<group>"; };
 		8876D6BD20B2C2F100826F85 /* HTRTMPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTRTMPManager.m; sourceTree = "<group>"; };
 		8876D6C020B2C2F100826F85 /* amf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amf.h; sourceTree = "<group>"; };
@@ -128,6 +123,8 @@
 		8876D72B20B40AFF00826F85 /* HTVideoEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTVideoEncoder.m; sourceTree = "<group>"; };
 		8876D72D20B40B1500826F85 /* HTAudioEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTAudioEncoder.h; sourceTree = "<group>"; };
 		8876D72E20B40B1500826F85 /* HTAudioEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTAudioEncoder.m; sourceTree = "<group>"; };
+		8876D73120B4FFE800826F85 /* HTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTCapture.h; sourceTree = "<group>"; };
+		8876D73220B4FFE800826F85 /* HTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTCapture.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,10 +162,9 @@
 		8876D69720B26F3800826F85 /* HTLivePushKit */ = {
 			isa = PBXGroup;
 			children = (
+				8876D73020B4FFE800826F85 /* Capture */,
 				8876D72920B40AFF00826F85 /* Encoder */,
 				8876D6BB20B2C2F100826F85 /* RTMP */,
-				8876D6AE20B26FD100826F85 /* HTCapture.h */,
-				8876D6AF20B26FD100826F85 /* HTCapture.m */,
 				8876D69820B26F3800826F85 /* AppDelegate.h */,
 				8876D69920B26F3800826F85 /* AppDelegate.m */,
 				8876D69B20B26F3800826F85 /* ViewController.h */,
@@ -178,8 +174,6 @@
 				8876D6A320B26F3800826F85 /* LaunchScreen.storyboard */,
 				8876D6A620B26F3800826F85 /* Info.plist */,
 				8876D6A720B26F3800826F85 /* main.m */,
-				8876D6B520B2BC7400826F85 /* HTH264NALUWrapper.h */,
-				8876D6B620B2BC7400826F85 /* HTH264NALUWrapper.m */,
 			);
 			path = HTLivePushKit;
 			sourceTree = "<group>";
@@ -326,6 +320,15 @@
 			path = Encoder;
 			sourceTree = "<group>";
 		};
+		8876D73020B4FFE800826F85 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				8876D73120B4FFE800826F85 /* HTCapture.h */,
+				8876D73220B4FFE800826F85 /* HTCapture.m */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -399,12 +402,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8876D69D20B26F3800826F85 /* ViewController.m in Sources */,
+				8876D73320B4FFE800826F85 /* HTCapture.m in Sources */,
 				8876D72F20B40B1500826F85 /* HTAudioEncoder.m in Sources */,
 				8876D71420B2C2F100826F85 /* HTRTMPManager.m in Sources */,
-				8876D6B720B2BC7400826F85 /* HTH264NALUWrapper.m in Sources */,
 				8876D72C20B40AFF00826F85 /* HTVideoEncoder.m in Sources */,
 				8876D6A820B26F3800826F85 /* main.m in Sources */,
-				8876D6B020B26FD100826F85 /* HTCapture.m in Sources */,
 				8876D69A20B26F3800826F85 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

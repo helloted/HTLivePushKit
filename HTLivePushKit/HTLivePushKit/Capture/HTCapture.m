@@ -11,7 +11,6 @@
 @interface HTCapture ()<AVCaptureAudioDataOutputSampleBufferDelegate,AVCaptureVideoDataOutputSampleBufferDelegate>
 
 @property (nonatomic, strong)AVCaptureDeviceInput   *currentVideoInput;
-@property (nonatomic, strong)AVCaptureConnection    *videoConnection;
 
 @end
 
@@ -47,6 +46,8 @@
     
     // 7.获取视频数据输出设备
     AVCaptureVideoDataOutput *videoOutput = [[AVCaptureVideoDataOutput alloc] init];
+    
+
     // 7.1 设置代理，捕获视频样品数据
     // 注意：队列必须是串行队列，才能获取到数据，而且不能为空
     dispatch_queue_t videoQueue = dispatch_queue_create("Video Capture Queue", DISPATCH_QUEUE_SERIAL);
@@ -65,8 +66,9 @@
         [_captureSession addOutput:audioOutput];
     }
     
-    // 9.获取视频输入与输出连接，用于分辨音视频数据
-    _videoConnection = [videoOutput connectionWithMediaType:AVMediaTypeVideo];
+    // 视频输出的方向
+    AVCaptureConnection *videoConnection = [videoOutput connectionWithMediaType:AVMediaTypeVideo];
+    videoConnection.videoOrientation = AVCaptureVideoOrientationPortrait;
     
     return _captureSession;
 }
@@ -102,17 +104,9 @@
 }
 
 
-
-
 // 获取输入设备数据，有可能是音频有可能是视频
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
-//    if ([connection.output isKindOfClass:[AVCaptureVideoDataOutput class]] && self.delegate && [self.delegate respondsToSelector:@selector(ht_captureOutput:didOutputSampleBuffer:fromConnection:)]) {
-//        [self.delegate ht_captureOutput:captureOutput didOutputSampleBuffer:sampleBuffer fromConnection:connection];
-//    }
-//    if (_videoConnection == connection && self.delegate && [self.delegate respondsToSelector:@selector(ht_captureOutput:didOutputSampleBuffer:fromConnection:)]) {
-//        [self.delegate ht_captureOutput:captureOutput didOutputSampleBuffer:sampleBuffer fromConnection:connection];
-//    }
     [self.delegate ht_captureOutput:captureOutput didOutputSampleBuffer:sampleBuffer fromConnection:connection];
 }
 
