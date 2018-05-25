@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "HTLivePushKit"
-  s.version      = "1.0.4"
+  s.version      = "1.0.5"
   s.summary      = "This is a Kit for iOS Live Push"
   s.description  = "This is a Kit for iOS Live Push,you can pod this Kit to push video and audio"
 
@@ -76,9 +76,9 @@ Pod::Spec.new do |s|
   #
 
 
-  s.public_header_files = 'include/librtmp/{*}.h', 'include/openssl/{*}.h'
+  s.public_header_files = 'Classes/HTLivePushKit.h'
 
-  s.source_files  = "include/**/*.{h,m}"
+  s.source_files  = 'Classes/HTLivePushKit.h'
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/include/**", "LIBRARY_SEARCH_PATHS" => "${PODS_ROOT}/#{s.name}/libs/**" }
 
   # s.public_header_files = "Classes/**/*.h"
@@ -109,7 +109,7 @@ Pod::Spec.new do |s|
 
   s.library   = "z"
 
-  s.vendored_libraries = "libs/libcrypto.a","libs/librtmp.a","libs/libssl.a"
+  # s.vendored_libraries = "libs/libcrypto.a","libs/librtmp.a","libs/libssl.a"
 
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -122,5 +122,11 @@ Pod::Spec.new do |s|
 
   # s.xcconfig = { 'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/include/**", "LIBRARY_SEARCH_PATHS" => "${PODS_ROOT}/#{s.name}/lib/**" }
   # s.dependency "JSONKit", "~> 1.4"
+
+  s.subspec 'HTCapture' do |ss|
+    ss.source_files = 'Classes/Capture/*.{h,m}'
+    ss.public_header_files = 'Classes/Capture/*.h'
+    ss.frameworks = 'AVFoundation'
+  end
 
 end
