@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "HTLivePushKit"
-  s.version      = "1.0.1"
+  s.version      = "1.0.3"
   s.summary      = "This is a Kit for iOS Live Push"
   s.description  = "This is a Kit for iOS Live Push,you can pod this Kit to push video and audio"
 
@@ -75,7 +75,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Classes", "Classes/*.{h,m}"
+  s.source_files  = "Classes", "Classes/**/*.{h,m}","Classes/RTMP/include/**/*.{h,m}"
   s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
@@ -106,6 +106,8 @@ Pod::Spec.new do |s|
 
   # s.library   = "iconv"
   # s.libraries = "iconv", "xml2"
+
+  s.vendored_libraries = "Frameworks/libcrypto.a","Frameworks/librtmp.a","Frameworks/libssl.a"
 
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
