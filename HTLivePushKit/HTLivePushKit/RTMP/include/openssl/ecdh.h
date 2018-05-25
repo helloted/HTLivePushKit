@@ -69,7 +69,7 @@
 #ifndef HEADER_ECDH_H
 #define HEADER_ECDH_H
 
-#include <openssl/opensslconf.h>
+#include "opensslconf.h"
 
 #ifdef OPENSSL_NO_ECDH
 #error ECDH is disabled.

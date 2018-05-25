@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "HTLivePushKit"
-  s.version      = "1.0.5"
+  s.version      = "1.0.6"
   s.summary      = "This is a Kit for iOS Live Push"
   s.description  = "This is a Kit for iOS Live Push,you can pod this Kit to push video and audio"
 
@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   #
 
   # s.license      = "MIT"
-  s.license      = { :type => "MIT", :file => "LICENSE" }
+  s.license      = { :type => "MIT", :file => "Classes/LICENSE" }
 
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -127,6 +127,12 @@ Pod::Spec.new do |s|
     ss.source_files = 'Classes/Capture/*.{h,m}'
     ss.public_header_files = 'Classes/Capture/*.h'
     ss.frameworks = 'AVFoundation'
+  end
+
+  s.subspec 'librtmp' do |ss|
+    ss.xcconfig = { "HEADER_SEARCH_PATHS" => "{PODS_ROOT}/#{s.name}/openssl" }
+    ss.source_files = 'openssl/*.{h,m}'
+    ss.public_header_files = 'openssl/*.h'
   end
 
 end

@@ -1,5 +1,5 @@
-/* crypto/rc4/rc4.h */
-/* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
+/* crypto/txt_db/txt_db.h */
+/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
  * This package is an SSL implementation written
@@ -56,32 +56,54 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef HEADER_RC4_H
-#define HEADER_RC4_H
+#ifndef HEADER_TXT_DB_H
+#define HEADER_TXT_DB_H
 
-#include <openssl/opensslconf.h> /* OPENSSL_NO_RC4, RC4_INT */
-#ifdef OPENSSL_NO_RC4
-#error RC4 is disabled.
+#include "opensslconf.h"
+#ifndef OPENSSL_NO_BIO
+#include <openssl/bio.h>
 #endif
+#include <openssl/stack.h>
+#include <openssl/lhash.h>
 
-#include <stddef.h>
+#define DB_ERROR_OK			0
+#define DB_ERROR_MALLOC			1
+#define DB_ERROR_INDEX_CLASH    	2
+#define DB_ERROR_INDEX_OUT_OF_RANGE	3
+#define DB_ERROR_NO_INDEX		4
+#define DB_ERROR_INSERT_INDEX_CLASH    	5
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-typedef struct rc4_key_st
-	{
-	RC4_INT x,y;
-	RC4_INT data[256];
-	} RC4_KEY;
+typedef OPENSSL_STRING *OPENSSL_PSTRING;
+DECLARE_SPECIAL_STACK_OF(OPENSSL_PSTRING, OPENSSL_STRING)
 
- 
-const char *RC4_options(void);
-void RC4_set_key(RC4_KEY *key, int len, const unsigned char *data);
-void private_RC4_set_key(RC4_KEY *key, int len, const unsigned char *data);
-void RC4(RC4_KEY *key, size_t len, const unsigned char *indata,
-		unsigned char *outdata);
+typedef struct txt_db_st
+	{
+	int num_fields;
+	STACK_OF(OPENSSL_PSTRING) *data;
+	LHASH_OF(OPENSSL_STRING) **index;
+	int (**qual)(OPENSSL_STRING *);
+	long error;
+	long arg1;
+	long arg2;
+	OPENSSL_STRING *arg_row;
+	} TXT_DB;
+
+#ifndef OPENSSL_NO_BIO
+TXT_DB *TXT_DB_read(BIO *in, int num);
+long TXT_DB_write(BIO *out, TXT_DB *db);
+#else
+TXT_DB *TXT_DB_read(char *in, int num);
+long TXT_DB_write(char *out, TXT_DB *db);
+#endif
+int TXT_DB_create_index(TXT_DB *db,int field,int (*qual)(OPENSSL_STRING *),
+			LHASH_HASH_FN_TYPE hash, LHASH_COMP_FN_TYPE cmp);
+void TXT_DB_free(TXT_DB *db);
+OPENSSL_STRING *TXT_DB_get_by_index(TXT_DB *db, int idx, OPENSSL_STRING *value);
+int TXT_DB_insert(TXT_DB *db, OPENSSL_STRING *value);
 
 #ifdef  __cplusplus
 }

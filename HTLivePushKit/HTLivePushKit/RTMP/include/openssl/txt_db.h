@@ -59,7 +59,7 @@
 #ifndef HEADER_TXT_DB_H
 #define HEADER_TXT_DB_H
 
-#include <openssl/opensslconf.h>
+#include "opensslconf.h"
 #ifndef OPENSSL_NO_BIO
 #include <openssl/bio.h>
 #endif

@@ -1,5 +1,5 @@
-/* crypto/cast/cast.h */
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
+/* crypto/rc4/rc4.h */
+/* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
  * This package is an SSL implementation written
@@ -56,49 +56,32 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef HEADER_CAST_H
-#define HEADER_CAST_H
+#ifndef HEADER_RC4_H
+#define HEADER_RC4_H
+
+#include "opensslconf.h" /* OPENSSL_NO_RC4, RC4_INT */
+#ifdef OPENSSL_NO_RC4
+#error RC4 is disabled.
+#endif
+
+#include <stddef.h>
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-#include <openssl/opensslconf.h>
-
-#ifdef OPENSSL_NO_CAST
-#error CAST is disabled.
-#endif
-
-#define CAST_ENCRYPT	1
-#define CAST_DECRYPT	0
-
-#define CAST_LONG unsigned int
-
-#define CAST_BLOCK	8
-#define CAST_KEY_LENGTH	16
-
-typedef struct cast_key_st
+typedef struct rc4_key_st
 	{
-	CAST_LONG data[32];
-	int short_key;	/* Use reduced rounds for short key */
-	} CAST_KEY;
+	RC4_INT x,y;
+	RC4_INT data[256];
+	} RC4_KEY;
 
-#ifdef OPENSSL_FIPS 
-void private_CAST_set_key(CAST_KEY *key, int len, const unsigned char *data);
-#endif
-void CAST_set_key(CAST_KEY *key, int len, const unsigned char *data);
-void CAST_ecb_encrypt(const unsigned char *in, unsigned char *out, const CAST_KEY *key,
-		      int enc);
-void CAST_encrypt(CAST_LONG *data, const CAST_KEY *key);
-void CAST_decrypt(CAST_LONG *data, const CAST_KEY *key);
-void CAST_cbc_encrypt(const unsigned char *in, unsigned char *out, long length,
-		      const CAST_KEY *ks, unsigned char *iv, int enc);
-void CAST_cfb64_encrypt(const unsigned char *in, unsigned char *out,
-			long length, const CAST_KEY *schedule, unsigned char *ivec,
-			int *num, int enc);
-void CAST_ofb64_encrypt(const unsigned char *in, unsigned char *out, 
-			long length, const CAST_KEY *schedule, unsigned char *ivec,
-			int *num);
+ 
+const char *RC4_options(void);
+void RC4_set_key(RC4_KEY *key, int len, const unsigned char *data);
+void private_RC4_set_key(RC4_KEY *key, int len, const unsigned char *data);
+void RC4(RC4_KEY *key, size_t len, const unsigned char *indata,
+		unsigned char *outdata);
 
 #ifdef  __cplusplus
 }

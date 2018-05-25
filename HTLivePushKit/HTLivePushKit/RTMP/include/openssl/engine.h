@@ -64,7 +64,7 @@
 #ifndef HEADER_ENGINE_H
 #define HEADER_ENGINE_H
 
-#include <openssl/opensslconf.h>
+#include "opensslconf.h"
 
 #ifdef OPENSSL_NO_ENGINE
 #error ENGINE is disabled.

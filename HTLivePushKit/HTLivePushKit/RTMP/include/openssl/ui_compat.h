@@ -59,7 +59,7 @@
 #ifndef HEADER_UI_COMPAT_H
 #define HEADER_UI_COMPAT_H
 
-#include <openssl/opensslconf.h>
+#include "opensslconf.h"
 #include <openssl/ui.h>
 
 #ifdef  __cplusplus

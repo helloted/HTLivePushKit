@@ -1,4 +1,4 @@
-/* crypto/idea/idea.h */
+/* crypto/rc2/rc2.h */
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -56,46 +56,46 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef HEADER_IDEA_H
-#define HEADER_IDEA_H
+#ifndef HEADER_RC2_H
+#define HEADER_RC2_H
 
-#include <openssl/opensslconf.h> /* IDEA_INT, OPENSSL_NO_IDEA */
-
-#ifdef OPENSSL_NO_IDEA
-#error IDEA is disabled.
+#include "opensslconf.h" /* OPENSSL_NO_RC2, RC2_INT */
+#ifdef OPENSSL_NO_RC2
+#error RC2 is disabled.
 #endif
 
-#define IDEA_ENCRYPT	1
-#define IDEA_DECRYPT	0
+#define RC2_ENCRYPT	1
+#define RC2_DECRYPT	0
 
-#define IDEA_BLOCK	8
-#define IDEA_KEY_LENGTH	16
+#define RC2_BLOCK	8
+#define RC2_KEY_LENGTH	16
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
-typedef struct idea_key_st
+typedef struct rc2_key_st
 	{
-	IDEA_INT data[9][6];
-	} IDEA_KEY_SCHEDULE;
+	RC2_INT data[64];
+	} RC2_KEY;
 
-const char *idea_options(void);
-void idea_ecb_encrypt(const unsigned char *in, unsigned char *out,
-	IDEA_KEY_SCHEDULE *ks);
-#ifdef OPENSSL_FIPS
-void private_idea_set_encrypt_key(const unsigned char *key, IDEA_KEY_SCHEDULE *ks);
+#ifdef OPENSSL_FIPS 
+void private_RC2_set_key(RC2_KEY *key, int len, const unsigned char *data,int bits);
 #endif
-void idea_set_encrypt_key(const unsigned char *key, IDEA_KEY_SCHEDULE *ks);
-void idea_set_decrypt_key(IDEA_KEY_SCHEDULE *ek, IDEA_KEY_SCHEDULE *dk);
-void idea_cbc_encrypt(const unsigned char *in, unsigned char *out,
-	long length, IDEA_KEY_SCHEDULE *ks, unsigned char *iv,int enc);
-void idea_cfb64_encrypt(const unsigned char *in, unsigned char *out,
-	long length, IDEA_KEY_SCHEDULE *ks, unsigned char *iv,
-	int *num,int enc);
-void idea_ofb64_encrypt(const unsigned char *in, unsigned char *out,
-	long length, IDEA_KEY_SCHEDULE *ks, unsigned char *iv, int *num);
-void idea_encrypt(unsigned long *in, IDEA_KEY_SCHEDULE *ks);
+void RC2_set_key(RC2_KEY *key, int len, const unsigned char *data,int bits);
+void RC2_ecb_encrypt(const unsigned char *in,unsigned char *out,RC2_KEY *key,
+		     int enc);
+void RC2_encrypt(unsigned long *data,RC2_KEY *key);
+void RC2_decrypt(unsigned long *data,RC2_KEY *key);
+void RC2_cbc_encrypt(const unsigned char *in, unsigned char *out, long length,
+	RC2_KEY *ks, unsigned char *iv, int enc);
+void RC2_cfb64_encrypt(const unsigned char *in, unsigned char *out,
+		       long length, RC2_KEY *schedule, unsigned char *ivec,
+		       int *num, int enc);
+void RC2_ofb64_encrypt(const unsigned char *in, unsigned char *out,
+		       long length, RC2_KEY *schedule, unsigned char *ivec,
+		       int *num);
+
 #ifdef  __cplusplus
 }
 #endif

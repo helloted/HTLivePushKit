@@ -81,7 +81,7 @@
 #ifndef HEADER_SEED_H
 #define HEADER_SEED_H
 
-#include <openssl/opensslconf.h>
+#include "opensslconf.h"
 #include <openssl/e_os2.h>
 #include <openssl/crypto.h>
 

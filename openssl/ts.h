@@ -59,7 +59,7 @@
 #ifndef HEADER_TS_H
 #define HEADER_TS_H
 
-#include <openssl/opensslconf.h>
+#include "opensslconf.h"
 #include <openssl/symhacks.h>
 #ifndef OPENSSL_NO_BUFFER
 #include <openssl/buffer.h>
