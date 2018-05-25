@@ -75,8 +75,11 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Classes", "Classes/**/*.{h,m}","Classes/RTMP/include/**/*.{h,m}"
-  s.exclude_files = "Classes/Exclude"
+
+  s.public_header_files = 'include/librtmp/{*}.h', 'include/openssl/{*}.h'
+
+  s.source_files  = "include/**/*.{h,m}"
+  s.xcconfig = { 'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/include/**", "LIBRARY_SEARCH_PATHS" => "${PODS_ROOT}/#{s.name}/libs/**" }
 
   # s.public_header_files = "Classes/**/*.h"
 
@@ -104,10 +107,9 @@ Pod::Spec.new do |s|
   s.frameworks  = "AVFoundation","VideoToolbox","AudioToolbox"
   # s.frameworks = "SomeFramework", "AnotherFramework"
 
-  # s.library   = "iconv"
-  # s.libraries = "iconv", "xml2"
+  s.library   = "z"
 
-  s.vendored_libraries = "Frameworks/libcrypto.a","Frameworks/librtmp.a","Frameworks/libssl.a"
+  s.vendored_libraries = "libs/libcrypto.a","libs/librtmp.a","libs/libssl.a"
 
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -116,9 +118,9 @@ Pod::Spec.new do |s|
   #  where they will only apply to your library. If you depend on other Podspecs
   #  you can include multiple dependencies to ensure it works.
 
-  # s.requires_arc = true
+  s.requires_arc = true
 
-  # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
+  # s.xcconfig = { 'HEADER_SEARCH_PATHS' => "${PODS_ROOT}/#{s.name}/include/**", "LIBRARY_SEARCH_PATHS" => "${PODS_ROOT}/#{s.name}/lib/**" }
   # s.dependency "JSONKit", "~> 1.4"
 
 end
