@@ -26,7 +26,6 @@
  */
 
 #include <stdint.h>
-#include <librtmp/http.h>
 
 #ifndef TRUE
 #define TRUE	1

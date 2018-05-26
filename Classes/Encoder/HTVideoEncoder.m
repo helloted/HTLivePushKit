@@ -29,7 +29,6 @@
 
 -(void)openWithConfig:(HTVideoConfig)config{
     self.config = config;
-    __weak __typeof(&*self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         //创建 video encode session
         // 创建 video encode session
@@ -38,23 +37,23 @@
         // (__bridge void * _Nullable)(self)：这个参数会被原封不动地传入compressionSessionCallback中，此参数为编码回调同外界通信的唯一参数。
         // &_compressionSession，c语言可以给传入参数赋值。在函数内部会分配内存并初始化_compressionSession。
         
-        OSStatus status = VTCompressionSessionCreate(NULL, (int32_t)weakSelf.config.width, (int32_t)weakSelf.config.height, kCMVideoCodecType_H264, NULL, NULL, NULL, compressionSessionCallback, (__bridge void * _Nullable)(weakSelf), &_compressionSession);
+        OSStatus status = VTCompressionSessionCreate(NULL, (int32_t)self.config.width, (int32_t)self.config.height, kCMVideoCodecType_H264, NULL, NULL, NULL, compressionSessionCallback, (__bridge void * _Nullable)(self), &_compressionSession);
         if (status == noErr) {
             // 设置参数
             // ProfileLevel，h264的协议等级，不同的清晰度使用不同的ProfileLevel。
-            VTSessionSetProperty(weakSelf.compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_AutoLevel);
+            VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_AutoLevel);
             // 设置码率
-            VTSessionSetProperty(weakSelf.compressionSession, kVTCompressionPropertyKey_AverageBitRate, (__bridge CFTypeRef)@(self.config.bitrate));
+            VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_AverageBitRate, (__bridge CFTypeRef)@(self.config.bitrate));
             // 设置实时编码
-            VTSessionSetProperty(weakSelf.compressionSession, kVTCompressionPropertyKey_RealTime, kCFBooleanTrue);
+            VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_RealTime, kCFBooleanTrue);
             // 关闭重排Frame，因为有了B帧（双向预测帧，根据前后的图像计算出本帧）后，编码顺序可能跟显示顺序不同。此参数可以关闭B帧。
-            VTSessionSetProperty(weakSelf.compressionSession, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
+            VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
             // 关键帧最大间隔，关键帧也就是I帧。此处表示关键帧最大间隔为2s。
-            VTSessionSetProperty(weakSelf.compressionSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)@(self.config.fps * 2));
+            VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)@(self.config.fps * 2));
             // 关于B帧 P帧 和I帧，请参考：http://blog.csdn.net/abcjennifer/article/details/6577934
             
             //参数设置完毕，准备开始，至此初始化完成，随时来数据，随时编码
-            status = VTCompressionSessionPrepareToEncodeFrames(weakSelf.compressionSession);
+            status = VTCompressionSessionPrepareToEncodeFrames(_compressionSession);
             if (status != noErr) {
                 NSLog(@"硬编码compressionSession 准备失败");
             }else{
