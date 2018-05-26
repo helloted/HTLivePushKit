@@ -125,6 +125,7 @@
 		8876D72E20B40B1500826F85 /* HTAudioEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTAudioEncoder.m; sourceTree = "<group>"; };
 		8876D73120B4FFE800826F85 /* HTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTCapture.h; sourceTree = "<group>"; };
 		8876D73220B4FFE800826F85 /* HTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTCapture.m; sourceTree = "<group>"; };
+		8877760620B927BC004F7E87 /* HTLivePushKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTLivePushKit.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +163,7 @@
 		8876D69720B26F3800826F85 /* HTLivePushKit */ = {
 			isa = PBXGroup;
 			children = (
+				8877760620B927BC004F7E87 /* HTLivePushKit.h */,
 				8876D73020B4FFE800826F85 /* Capture */,
 				8876D72920B40AFF00826F85 /* Encoder */,
 				8876D6BB20B2C2F100826F85 /* RTMP */,

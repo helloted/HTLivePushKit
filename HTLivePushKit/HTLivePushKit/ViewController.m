@@ -7,10 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "HTCapture.h"
-#import "HTVideoEncoder.h"
-#import "HTRTMPManager.h"
-#import "HTAudioEncoder.h"
+#import "HTLivePushKit.h"
 
 @interface ViewController ()<HTCaptureDelegate,HTVideoEncoderDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *switchBtn;
